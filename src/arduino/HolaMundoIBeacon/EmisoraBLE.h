@@ -31,20 +31,22 @@ public:
   void encenderEmisora() {
     Bluefruit.begin();
 
-    // Detener y limpiar anuncios previos
+    // Limpiar anuncios previos
     Bluefruit.Advertising.stop();
     Bluefruit.Advertising.clearData();
     Bluefruit.ScanResponse.clearData();
 
     // Configurar nombre visible
     Bluefruit.setName(nombreEmisora);
+
+    // Forzar nombre en ambos paquetes (Advertising + ScanResponse)
+    Bluefruit.Advertising.addName();  
     Bluefruit.ScanResponse.addName();
 
     // Añadir flags y potencia al paquete ADV
     Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);
     Bluefruit.Advertising.addTxPower();
 
-    // Detenemos cualquier anuncio previo
     detenerAnuncio();
   } // ()
 
@@ -73,6 +75,9 @@ public:
 
     Bluefruit.setTxPower( txPower );
     Bluefruit.setName(nombreEmisora);
+
+    // Forzar nombre en Advertising y ScanResponse
+    Bluefruit.Advertising.addName();  
     Bluefruit.ScanResponse.addName();
 
     Bluefruit.Advertising.setBeacon( elBeacon );
@@ -89,6 +94,9 @@ public:
     Bluefruit.ScanResponse.clearData();
 
     Bluefruit.setName(nombreEmisora);
+
+    // Forzar nombre en Advertising y ScanResponse
+    Bluefruit.Advertising.addName();  
     Bluefruit.ScanResponse.addName();
 
     Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);

@@ -1,6 +1,4 @@
 package com.example.sprint0_biometria;
-// ------------------------------------------------------------------
-// ------------------------------------------------------------------
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -10,26 +8,25 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;   //Se importa Handler para programar tareas periódicas
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import java.util.List;
-
-// ------------------------------------------------------------------
-// ------------------------------------------------------------------
 
 public class MainActivity extends AppCompatActivity {
 
-    // --------------------------------------------------------------
     private static final String ETIQUETA_LOG = ">>>>";
     private static final int CODIGO_PETICION_PERMISOS = 11223344;
 
     private BluetoothLeScanner elEscanner;
     private ScanCallback callbackDelEscaneo = null;
+
+    // Se declara un Handler y un Runnable para la lógica fake
+    //    Con esto se arranca una tarea que se repite cada cierto tiempo
+    private Handler handler = new Handler();
+    private Runnable fakeDataTask;
 
     // --------------------------------------------------------------
     private void buscarTodosLosDispositivosBTLE() {
@@ -44,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
         };
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION},
+                    CODIGO_PETICION_PERMISOS
+            );
             return;
         }
         this.elEscanner.startScan(this.callbackDelEscaneo);
@@ -51,19 +53,34 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
+        if (resultado == null) return;
+
         BluetoothDevice bluetoothDevice = resultado.getDevice();
-        byte[] bytes = resultado.getScanRecord().getBytes();
-        int rssi = resultado.getRssi();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                    CODIGO_PETICION_PERMISOS
+            );
             return;
         }
 
-        Log.d(ETIQUETA_LOG, " ****************************************************");
-        Log.d(ETIQUETA_LOG, " nombre = " + bluetoothDevice.getName());
-        Log.d(ETIQUETA_LOG, " dirección = " + bluetoothDevice.getAddress());
-        Log.d(ETIQUETA_LOG, " rssi = " + rssi);
-        Log.d(ETIQUETA_LOG, " ****************************************************");
+        Log.d(ETIQUETA_LOG, " ****** DISPOSITIVO DETECTADO ****** ");
+        Log.d(ETIQUETA_LOG, "Dirección = " + bluetoothDevice.getAddress());
+        Log.d(ETIQUETA_LOG, "Nombre (getDevice) = " + bluetoothDevice.getName());
+
+        if (resultado.getScanRecord() != null) {
+            String nombreRecord = resultado.getScanRecord().getDeviceName();
+            Log.d(ETIQUETA_LOG, "Nombre (ScanRecord) = " + nombreRecord);
+
+            byte[] bytes = resultado.getScanRecord().getBytes();
+            Log.d(ETIQUETA_LOG, "Bytes (" + bytes.length + ") = " + Utilidades.bytesToHexString(bytes));
+        } else {
+            Log.d(ETIQUETA_LOG, "ScanRecord es NULL");
+        }
+
+        Log.d(ETIQUETA_LOG, "RSSI = " + resultado.getRssi());
     }
 
     // --------------------------------------------------------------
@@ -74,21 +91,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScanResult(int callbackType, ScanResult resultado) {
                 super.onScanResult(callbackType, resultado);
-
-                BluetoothDevice dispositivo = resultado.getDevice();
-                String nombre = dispositivo.getName();
-
-                // 👇 FILTRO SIMPLE: solo mostramos si coincide el nombre
-                if (nombre != null && nombre.equals(dispositivoBuscado)) {
-                    Log.d(ETIQUETA_LOG, "✅ Encontrado nuestro beacon: " + dispositivoBuscado);
-                    mostrarInformacionDispositivoBTLE(resultado);
-                }
+                mostrarInformacionDispositivoBTLE(resultado);
             }
         };
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION},
+                    CODIGO_PETICION_PERMISOS
+            );
             return;
         }
+
         this.elEscanner.startScan(this.callbackDelEscaneo);
     }
 
@@ -97,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
         if (this.callbackDelEscaneo == null) return;
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.BLUETOOTH_SCAN},
+                    CODIGO_PETICION_PERMISOS
+            );
             return;
         }
         this.elEscanner.stopScan(this.callbackDelEscaneo);
@@ -105,33 +125,40 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
     public void botonBuscarDispositivosBTLEPulsado(View v) {
-        buscarTodosLosDispositivosBTLE();
+        Log.d(ETIQUETA_LOG, " boton buscar dispositivos BTLE Pulsado");
+        this.buscarTodosLosDispositivosBTLE();
     }
 
     public void botonBuscarNuestroDispositivoBTLEPulsado(View v) {
-        buscarEsteDispositivoBTLE("SantiBeacon"); // 👈 tu beacon
+        Log.d(ETIQUETA_LOG, " boton nuestro dispositivo BTLE Pulsado");
+        this.buscarEsteDispositivoBTLE("SantiBeacon");
     }
 
     public void botonDetenerBusquedaDispositivosBTLEPulsado(View v) {
-        detenerBusquedaDispositivosBTLE();
+        Log.d(ETIQUETA_LOG, " boton detener busqueda dispositivos BTLE Pulsado");
+        this.detenerBusquedaDispositivosBTLE();
     }
 
     // --------------------------------------------------------------
     private void inicializarBlueTooth() {
+        Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): obtenemos adaptador BT ");
+
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.BLUETOOTH_CONNECT},
+                    CODIGO_PETICION_PERMISOS
+            );
             return;
         }
+
         bta.enable();
         this.elEscanner = bta.getBluetoothLeScanner();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    MainActivity.this,
-                    new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION},
-                    CODIGO_PETICION_PERMISOS);
+        if (this.elEscanner == null) {
+            Log.d(ETIQUETA_LOG, " inicializarBlueTooth(): Socorro: NO hemos obtenido escaner btle !!!!");
         }
     }
 
@@ -140,18 +167,43 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(ETIQUETA_LOG, " onCreate(): empieza ");
         inicializarBlueTooth();
+
+        // Aquí se arranca la lógica fake
+        fakeDataTask = new Runnable() {
+            @Override
+            public void run() {
+                // Se genera un id de sensor falso
+                int sensorId = GeneradorDatosFake.getFakeSensorId();
+
+                // Se genera un valor falso
+                double valor = GeneradorDatosFake.getFakeValue();
+
+                // Se envía el dato a la API
+                ClienteApi.sendMeasurement(sensorId, valor);
+                Log.d(ETIQUETA_LOG, "Dato fake enviado → id_sensor=" + sensorId + " valor=" + valor);
+
+                // Se reprograma la tarea para repetirse cada 10 segundos
+                handler.postDelayed(this, 10000);
+            }
+        };
+        // Se ejecuta la tarea fake por primera vez
+        handler.post(fakeDataTask);
+
+        Log.d(ETIQUETA_LOG, " onCreate(): termina ");
     }
 
-    // --------------------------------------------------------------
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == CODIGO_PETICION_PERMISOS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(ETIQUETA_LOG, " permisos concedidos");
+                Log.d(ETIQUETA_LOG, " permisos concedidos !!!!");
             } else {
-                Log.d(ETIQUETA_LOG, " permisos NO concedidos");
+                Log.d(ETIQUETA_LOG, " permisos NO concedidos !!!!");
             }
         }
     }
