@@ -167,7 +167,7 @@ $db   = "sfuenma_biometria";
 ```
 
 4. Acceso final:
-   - **API:** [https://sfuenma.plesk.space/api/index.php?endpoint=mediciones](https://sfuenma.plesk.space/api/index.php?endpoint=mediciones)
+   - **API:** [https://sfuenma.upv.edu.es/api/index.php?endpoint=mediciones](https://sfuenma.upv.edu.es/api/index.php?endpoint=mediciones)
    - **Web:** [https://sfuenma.upv.edu.es/](https://sfuenma.upv.edu.es/)
 
 ---
