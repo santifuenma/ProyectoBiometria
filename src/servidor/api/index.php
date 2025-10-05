@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && $endpoint === "health") {
 // Endpoint GET /mediciones → se devuelven las últimas mediciones
 if ($_SERVER["REQUEST_METHOD"] === "GET" && $endpoint === "mediciones") {
     // Se consultan las últimas 50 mediciones ordenadas por fecha descendente
-    $result = $conn->query("SELECT * FROM Mediciones ORDER BY timestamp DESC LIMIT 50");
+    $result = $conn->query("SELECT id, id_sensor AS tipo, valor, timestamp AS fecha FROM Mediciones ORDER BY timestamp DESC LIMIT 50");
 
     $rows = [];
     while ($row = $result->fetch_assoc()) {
@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && $endpoint === "mediciones") {
     echo json_encode($rows);
     exit();
 }
+
 
 // ------------------------------------------------------------
 // Endpoint POST /mediciones → se inserta una nueva medición

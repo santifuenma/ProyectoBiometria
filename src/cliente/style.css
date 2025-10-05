@@ -1,0 +1,65 @@
+/* styles.css — Interfaz web de mediciones biométricas */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f8;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #0077b6;
+  color: white;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.4rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 2rem;
+  width: 90%;
+  max-width: 800px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #0077b6;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+#loading {
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+footer {
+  margin-top: auto;
+  padding: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
