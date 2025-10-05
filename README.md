@@ -119,7 +119,7 @@ La interfaz permite visualizar los datos obtenidos desde la API en una tabla din
 - Mensajes de carga y manejo básico de errores.
 
 **Acceso:**  
-[https://sfuenma.plesk.space/](https://sfuenma.plesk.space/)
+[https://sfuenma.upv.edu.es](https://sfuenma.upv.edu.es)
 
 ---
 
