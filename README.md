@@ -22,11 +22,19 @@ ProyectoBiometria/
 │   │   ├── Medidor.h
 │   │   ├── PuertoSerie.h
 │   │   └── ServicioEnEmisora.h
-│   ├── api/             → Backend PHP con API REST
-│   │   └── index.php
+│   ├── servidor/             → Backend PHP con API REST
+│   │   └── api/
+│   │       └──index.php
 │   └── cliente/         → Cliente web (HTML + CSS + JS)
-│       ├── index.html
-│       └── styles.css
+│   │   ├── index.html
+│   │   └── styles.css
+│   └── telefono/
+│   │   ├──AndroidManifest.xml
+│   │   ├──ClienteApi.java
+│   │   ├──GeneradorDatosFake.java
+│   │   ├──MainAtivity.java
+│   │   ├──TramaIbeacon.java
+│   │   └──Utilidades.java
 ├── doc/                 → Documentación técnica y esquemas
 ├── test/                → Pendiente de incluir tests automáticos
 └── README.md
@@ -119,7 +127,7 @@ La interfaz permite visualizar los datos obtenidos desde la API en una tabla din
 - Mensajes de carga y manejo básico de errores.
 
 **Acceso:**  
-[https://sfuenma.plesk.space/](https://sfuenma.plesk.space/)
+[https://sfuenma.upv.edu.es](https://sfuenma.upv.edu.es)
 
 ---
 
@@ -167,7 +175,7 @@ $db   = "sfuenma_biometria";
 ```
 
 4. Acceso final:
-   - **API:** [https://sfuenma.plesk.space/api/index.php?endpoint=mediciones](https://sfuenma.plesk.space/api/index.php?endpoint=mediciones)
+   - **API:** [https://sfuenma.upv.edu.es/api/index.php?endpoint=mediciones](https://sfuenma.upv.edu.es/api/index.php?endpoint=mediciones)
    - **Web:** [https://sfuenma.upv.edu.es/](https://sfuenma.upv.edu.es/)
 
 ---

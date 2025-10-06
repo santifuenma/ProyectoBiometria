@@ -21,7 +21,7 @@ private:
   // ............................................................
 public:
   EmisoraBLE laEmisora {
-    "SantiBeacon", // <<--- cambia aquí el nombre visible en la app
+    "Santi", // <<--- cambia aquí el nombre visible en la app
     0x004c,        // fabricanteID (Apple)
     4              // txPower
   };
