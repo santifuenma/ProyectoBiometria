@@ -8,70 +8,24 @@
 </head>
 
 <body>
-  <!-- Cabecera del sitio -->
   <header>Mediciones del Sistema Biométrico</header>
 
-  <!-- Mensaje mostrado mientras se cargan los datos -->
   <div id="loading">Cargando datos desde la base de datos...</div>
 
-  <!-- Tabla donde se mostrarán las mediciones -->
   <table id="tabla" style="display:none;">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Tipo</th>
+        <th>ID Sensor</th>
         <th>Valor</th>
-        <th>Fecha</th>
+        <th>Fecha y hora</th>
       </tr>
     </thead>
     <tbody id="contenido-tabla"></tbody>
   </table>
 
-  <!-- Pie con identificación del proyecto -->
-  <footer>Proyecto Biometría GTI 3A</footer>
+  <footer>Proyecto Biometría – GTI 3A</footer>
 
-  <script>
-    // Endpoint de la API
-    const URL = "./api/index.php?endpoint=mediciones";
-
-    // Función que carga los datos desde la API y los muestra en la tabla
-    async function cargarDatos() {
-      try {
-        const respuesta = await fetch(URL);
-        const datos = await respuesta.json();
-
-        const tabla = document.getElementById("tabla");
-        const contenido = document.getElementById("contenido-tabla");
-        const loading = document.getElementById("loading");
-
-        loading.style.display = "none";
-        tabla.style.display = "table";
-
-        if (datos.length === 0) {
-          contenido.innerHTML = `<tr><td colspan="4">No hay mediciones registradas</td></tr>`;
-          return;
-        }
-
-        // Agrega cada medición a la tabla
-        datos.forEach((fila) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${fila.id}</td>
-            <td>${fila.tipo || "-"}</td>
-            <td>${fila.valor}</td>
-            <td>${fila.fecha || "-"}</td>
-          `;
-          contenido.appendChild(tr);
-        });
-
-      } catch (error) {
-        document.getElementById("loading").innerText = "Error al cargar los datos";
-        console.error("Error:", error);
-      }
-    }
-
-    // Ejecuta la carga al iniciar la página
-    cargarDatos();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
