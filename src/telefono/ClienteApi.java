@@ -8,11 +8,11 @@ import java.net.URL;
 public class ClienteApi {
 
     // Se define la URL de la API en Plesk donde se enviarán las mediciones
-    private static final String API_URL = "https://sfuenma.upv.edu.es/api/index.php?endpoint=mediciones";
+    private static final String API_URL = "https://sfuenma.upv.edu.es/api/api.php?endpoint=medicion";
 
     // Metodo público para enviar una medición
     // Se arranca una AsyncTask que hace la operación en segundo plano
-    public static void sendMeasurement(int idSensor, double valor) {
+    public static void enviarMedicion(int idSensor, double valor) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
