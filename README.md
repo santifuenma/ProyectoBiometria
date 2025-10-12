@@ -4,7 +4,7 @@
 
 Proyecto desarrollado para la asignatura **Desarrollo de Sistemas Interactivos y Ciberfísicos (DSIC)** del Grado en Tecnologías Interactivas (GTI) – 3º curso.  
 El sistema permite medir variables ambientales (**CO₂** y **temperatura**) mediante un dispositivo **Arduino con Bluetooth Low Energy (BLE iBeacon)** y almacenar las mediciones en una **base de datos MySQL**, accesibles a través de una **API REST en PHP**.  
-Los datos pueden visualizarse en una **interfaz web** o en una **aplicación Android** con lógica de envío al backend.
+Los datos pueden visualizarse en una **interfaz web**.
 
 ---
 
@@ -132,7 +132,7 @@ La interfaz muestra los datos obtenidos desde la API en una tabla dinámica.
 
 Desarrollada en **Android Studio**.  
 La clase `ClienteApi` gestiona la comunicación con la API mediante peticiones HTTP, permitiendo:
-- Enviar mediciones simuladas desde la app.  
+- Enviar mediciones a la base de datos. 
 - Validar respuestas del backend.  
 - Integrar la lógica del sistema con otras clases (`MainActivity`, `TramaIBeacon`, `Utilidades`).  
 
@@ -184,9 +184,14 @@ Todos los tests se ejecutan automáticamente y verifican el funcionamiento de ca
 ### En Plesk (hosting)
 
 1. Subir la carpeta `/api` completa a `/httpdocs/api/`.  
+<<<<<<< HEAD
 2. Subir la carpeta `/web` a `/httpdocs/`.  
 3. Subir la carpeta `/test` a `/httpdocs/`.  
 4. Verificar conexión MySQL con las credenciales:
+=======
+2. Subir los ficheros de la carpeta `/cliente` a `/httpdocs/`.  
+3. Verificar conexión MySQL con las credenciales:
+>>>>>>> 27f0e644e549de4566a057674a80871fa98474a6
 
 ```php
 $host = "localhost:3306";
