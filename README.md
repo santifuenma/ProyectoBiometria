@@ -32,11 +32,14 @@ Sprint0_Biometria/
 │   │   ├── TramaIBeacon.java
 │   │   └── Utilidades.java
 │   │
-│   └── cliente/                  → Cliente web (HTML + CSS + JS)
-│       ├── index.html
-│       ├── styles.css
-│       └── script.js
-│
+│   ├── cliente/                  → Cliente web (HTML + CSS + JS)
+│   │   ├── index.html
+│   │   ├── styles.css
+│   │   └── script.js
+│   │
+│   └── test/
+│       ├── test_api.php
+│       └── test_logica.php
 └── doc/
     └── diseños/
         └── Documento de diseño Sprint_0.pdf
@@ -203,7 +206,6 @@ $db   = "sfuenma_biometria";
 5. Accesos:
    - **API:** [https://sfuenma.upv.edu.es/api/api.php?endpoint=mediciones](https://sfuenma.upv.edu.es/api/api.php?endpoint=mediciones)  
    - **Web:** [https://sfuenma.upv.edu.es/](https://sfuenma.upv.edu.es/)  
-   - **Tests:** [https://sfuenma.upv.edu.es/test/](https://sfuenma.upv.edu.es/test/)
 
 ---
 
