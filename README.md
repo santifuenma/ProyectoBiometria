@@ -78,7 +78,7 @@ Archivo principal: `/src/servidor/api/api.php`
 |--------|-----------|-------------|
 | GET | `/api/api.php?endpoint=health` | Devuelve el estado del servicio. |
 | GET | `/api/api.php?endpoint=mediciones` | Devuelve las últimas mediciones. |
-| POST | `/api/api.php?endpoint=mediciones` | Inserta una nueva medición (`id_sensor`, `valor`). |
+| POST | `/api/api.php?endpoint=medicion` | Inserta una nueva medición (`id_sensor`, `valor`). |
 
 #### Ejemplo de respuesta
 
@@ -140,16 +140,42 @@ La clase `ClienteApi` gestiona la comunicación con la API mediante peticiones H
 
 ## Tests
 
-Las pruebas se han realizado manualmente sobre:
+Se implementaron **tests automáticos completos** para la **Lógica de Negocio** y la **API REST**, siguiendo la rúbrica de la asignatura (automáticos, independientes e idempotentes).
 
-- Funcionamiento del API con **Postman**.  
-- Visualización en el cliente web.  
-- Emisión de datos BLE en Arduino.  
-- Envío de mediciones desde Android.
+### Estructura de pruebas
 
-**Pendiente de implementación:**
-- Tests automáticos para la API y la UI.  
-- Verificación automática de inserciones y respuestas.
+```
+/httpdocs/test/
+├── test_logica.php      → Comprueba las funciones de logica.php
+├── test_api.php         → Prueba los endpoints health, mediciones 
+
+```
+
+### Tests realizados
+
+| Test | Descripción | Resultado |
+|------|--------------|-----------|
+| `test_logica.php` | Verifica `consultarMediciones()` y `agregarMedicion()` accediendo a la base de datos y validando estructura de campos. |  Correcto |
+| `test_api.php` | Ejecuta peticiones `GET` y `POST` sobre la API (`health`, `mediciones`, `medicion`) y valida el formato JSON y la idempotencia. |  Correcto |
+
+### Ejecución de pruebas
+
+- **Desde navegador:**  
+  - [`https://sfuenma.upv.edu.es/test/test_logica.php`](https://sfuenma.upv.edu.es/test/test_logica.php)  
+  - [`https://sfuenma.upv.edu.es/test/test_api.php`](https://sfuenma.upv.edu.es/test/test_api.php)  
+
+- **Desde terminal (opcional):**
+  ```bash
+  php test/test_logica.php
+  php test/test_api.php
+  ```
+
+### Resultado general
+Todos los tests se ejecutan automáticamente y verifican el funcionamiento de cada capa del sistema, cumpliendo los criterios de la rúbrica:
+
+- **Automáticos:** no requieren interacción manual.  
+- **Independientes:** cada test funciona por separado.  
+- **Idempotentes:** el estado del sistema no cambia tras ejecutarse.
 
 ---
 
@@ -159,7 +185,8 @@ Las pruebas se han realizado manualmente sobre:
 
 1. Subir la carpeta `/api` completa a `/httpdocs/api/`.  
 2. Subir la carpeta `/web` a `/httpdocs/`.  
-3. Verificar conexión MySQL con las credenciales:
+3. Subir la carpeta `/test` a `/httpdocs/`.  
+4. Verificar conexión MySQL con las credenciales:
 
 ```php
 $host = "localhost:3306";
@@ -168,24 +195,16 @@ $pass = "Sfuenmayor";
 $db   = "sfuenma_biometria";
 ```
 
-4. Accesos:
-   - **API:** `https://sfuenma.upv.edu.es/api/api.php?endpoint=mediciones`  
-   - **Web:** `https://sfuenma.upv.edu.es/`
+5. Accesos:
+   - **API:** [https://sfuenma.upv.edu.es/api/api.php?endpoint=mediciones](https://sfuenma.upv.edu.es/api/api.php?endpoint=mediciones)  
+   - **Web:** [https://sfuenma.upv.edu.es/](https://sfuenma.upv.edu.es/)  
+   - **Tests:** [https://sfuenma.upv.edu.es/test/](https://sfuenma.upv.edu.es/test/)
 
 ---
 
 ## Documentación y créditos
 
 **Autor:** Santiago Fuenmayor Ruiz  
-**Asignatura:** Desarrollo de Sistemas Interactivos y Ciberfísicos (GTI 3A)  
-**Universidad:** Universitat Politècnica de València – Campus de Gandía  
-**Profesor:** Jordi Bataller i Mascarell  
-
+   
 ---
 
-## Próximos pasos
-
-- Implementar tests automáticos (PHPUnit / Jest / JUnit).  
-- Integrar sensores físicos para lecturas reales.  
-- Sincronizar los datos en tiempo real entre Arduino, servidor y Android.  
-- Mejorar la interfaz web con gráficos y actualización dinámica.
